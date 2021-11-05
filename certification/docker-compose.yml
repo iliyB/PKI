@@ -22,5 +22,51 @@ services:
     ports:
       - "5431:5432"
 
+  celery-certification:
+    restart: unless-stopped
+    build: .
+    command: celery -A settings.celery worker -l info --loglevel=debug --concurrency=2
+    container_name: celery_certification
+    volumes:
+      - .:/app
+    links:
+      - postgresql-certification
+    depends_on:
+      - certification-web
+      - postgresql-certification
+      - redis-certification
+
+  celery-beat-certification:
+    restart: unless-stopped
+    build: .
+    command: celery -A settings.celery beat -l info --loglevel=debug
+    container_name: celery_beat_certification
+    volumes:
+      - .:/app
+    depends_on:
+      - certification-web
+      - postgresql-certification
+      - redis-certification
+
+  flower-certification:
+    build: .
+    env_file: .env
+    command: /bin/bash -c "sleep 6 && celery flower -A settings.celery --port=5555 --basic_auth=admin:admin --pidfile /tmp/celery.pid"
+    container_name: flower_certification
+    volumes:
+      - .:/app
+    ports:
+      - "5555:5555"
+    depends_on:
+      - postgresql-certification
+      - redis-certification
+
+  redis-certification:
+    image: "redis:alpine"
+    container_name: redis-certification
+    ports:
+      - "6379:6379"
+
+
 volumes:
   db_certification:

@@ -20,7 +20,52 @@ services:
     volumes:
       - db_registration:/var/lib/postgresql/data/pgdata
     ports:
-      - "5431:5432"
+      - "5433:5432"
+
+  celery-registration:
+    restart: unless-stopped
+    build: .
+    command: celery -A settings.celery worker -l info --loglevel=debug --concurrency=2
+    container_name: celery_registration
+    volumes:
+      - .:/app
+    links:
+      - postgresql-registration
+    depends_on:
+      - registration-web
+      - postgresql-registration
+      - redis-registration
+
+  celery-beat-registration:
+    restart: unless-stopped
+    build: .
+    command: celery -A settings.celery beat -l info --loglevel=debug
+    container_name: celery_beat_registration
+    volumes:
+      - .:/app
+    depends_on:
+      - registration-web
+      - postgresql-registration
+      - redis-registration
+
+  flower-registration:
+    build: .
+    env_file: .env
+    command: /bin/bash -c "sleep 6 && celery flower -A settings.celery --port=6555 --basic_auth=admin:admin --pidfile /tmp/celery.pid"
+    container_name: flower_registration
+    volumes:
+      - .:/app
+    ports:
+      - "6555:6555"
+    depends_on:
+      - postgresql-registration
+      - redis-registration
+
+  redis-registration:
+    image: "redis:alpine"
+    container_name: redis-registration
+    ports:
+      - "6380:6379"
 
 volumes:
   db_registration:
