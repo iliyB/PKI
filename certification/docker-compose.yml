@@ -1,0 +1,26 @@
+version: '2'
+services:
+
+  certification-web:
+    restart: always
+    build: .
+    container_name: certification-web
+    command: bash -c "python manage.py runserver 0.0.0.0:8001"
+    volumes:
+      - .:/site
+    ports:
+      - "8001:8001"
+    depends_on:
+      - postgresql-certification
+
+  postgresql-certification:
+    image: postgres:12
+    container_name: db_certification
+    env_file: .env
+    volumes:
+      - db_certification:/var/lib/postgresql/data/pgdata
+    ports:
+      - "5431:5432"
+
+volumes:
+  db_certification:

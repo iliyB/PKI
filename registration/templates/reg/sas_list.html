@@ -1,0 +1,32 @@
+{% extends 'reg/base_template.html' %}
+
+
+{% block content %}
+    {% for sas in object_list %}
+    <div class="card" style="max-width: 100%; min-height: 10%; margin-bottom: 1%;">
+        <div class="card-body">
+            <div style="float: left; max-width: 25%"></div>
+            <div style="float: left; margin-left: 5%">
+                <p class="card-text">Версия сертификата: <b>{{ sas.version }}</b></p>
+                <p class="card-text">Идентификатор алгоритма цифровой подписи: <b>{{ sas.id_algorithm_signature }}</b></p>
+                <p class="card-text">Уникальное имя УЦ-издателя САС: <b>{{ sas.issuer }}</b></p>
+                <p class="card-text">Дата выпуска данного САС: <b>{{ sas.this_update }}</b></p>
+                <p class="card-text">Планируемая дата следующего САС: <b>{{ sas.next_update }}</b></p>
+                <p class="card-text">Идентификатор ключа, используемого для подтверждения САС: <b>{{ sas.authority_key_identifier }}</b></p>
+                <p class="card-text">Серийный номер списка аннулированных сертификатов: <b>{{ sas.crl_number }}</b></p>
+                <p class="card-text">Атрибуты выпускающего пункта распространения САС: <b>{{ sas.issuing_distribution_point }}</b></p>
+
+                {% for certificate in sas.certificate.all %}
+                    <div style="float: left; margin-left: 1%; margin-top: 6%;">
+                        <p class="card-text">Серийный номер сертификата: <b>{{ certificate.certificate_serial_number }}</b></p>
+                        <p class="card-text">Дата получения запроса об аннулировании: <b>{{ certificate.revocation_date }}</b></p>
+                        <p class="card-text">Код причины аннулирования: <b>{{ certificate.reason_code }}</b></p>
+                        <a href="{{ certificate.get_absolute_url }}">Подробнее</a>
+
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+{% endblock content %}

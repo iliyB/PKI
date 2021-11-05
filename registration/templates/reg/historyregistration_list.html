@@ -1,0 +1,27 @@
+{% extends 'reg/base_template.html' %}
+
+
+{% block content %}
+    <div class="row" style="max-width: 100%; min-height: 10%; margin-bottom: 1%;">
+        <a href="{% url 'history_registration_list_url' %}" class = "btn btn-primary" style="margin-left: 2%; margin-bottom: 2%; margin-top: 4%">Все</a>
+        <form class="form-inline" style="margin-left: 2%; margin-bottom: 2%; margin-top: 4%">
+            <input class="form-control mr-sm-2" type="search" placeholder="имя субъекта" name="subject" >
+            <button class="btn btn-info" type="submit">Найти</button>
+        </form>
+    </div>
+    {% for registration in object_list %}
+    <div class="card" style="max-width: 100%; min-height: 10%; margin-bottom: 1%;">
+        <div class="card-body">
+            <div style="float: left; max-width: 25%"></div>
+            <div class="row" style="float: left; margin-left: 5%">
+                <p class="card-text" style="margin-right: 3%;">Субъект: <b>{{ registration.subject }}</b></p>
+                <p class="card-text" style="margin-right: 3%;">Удачность: <b>{{ registration.status }}</b></p>
+                <p class="card-text" style="margin-right: 3%;">Время: <b>{{ registration.attempt_time }}</b></p>
+                {% if registration.status %}
+                    <p class="card-text" style="margin-right: 3%;">Номер сертификата: <b>{{ registration.certificate_serial_number }}</b></p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+{% endblock content %}

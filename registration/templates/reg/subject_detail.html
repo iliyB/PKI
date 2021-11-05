@@ -1,0 +1,30 @@
+{% extends 'reg/base_template.html' %}
+
+
+{% block content %}
+    <h3 style="margin-top: 5%;"><b>Имя субъекта: {{ subject.subject_name }}</b></h3>
+    <div>
+        <h3>История регистраций</h3>
+        {% for registration in subject.registrations.all %}
+            <p>Время: {{ registration.attempt_time }}</p>
+            <p>Статус: {{ registration.status }}</p>
+            <p>Номер сертификата: {{ registration.certificate_serial_number }}</p>
+            <br>
+        {% endfor %}
+    </div>
+    <div>
+        <h3>История запросов</h3>
+        <h4>Как субъекта</h4>
+            {% for history in subject.subjects.all %}
+                <p>Объект: {{ history.object }}</p>
+                <p>Время: {{ history.attempt_time }}</p>
+                <br>
+            {% endfor %}
+        <h4>Как объекта</h4>
+            {% for history in subject.objects.all %}
+                <p>Субъект: {{ history.subject }}</p>
+                <p>Время: {{ history.attempt_time }}</p>
+                <br>
+            {% endfor %}
+    </div>
+{% endblock content %}

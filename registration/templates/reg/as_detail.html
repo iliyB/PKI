@@ -1,0 +1,11 @@
+{% extends 'reg/base_template.html' %}
+
+
+{% block content %}
+    <p><i>Серийный номер сертификата:</i> {{ as.certificate_serial_number }}</p>
+    <p><i>Дата получения запроса об аннулировании:</i> {{ as.revocation_date }}</p>
+    <p><i>Код причины аннулирования:</i> {{ as.reason_code }}</p>
+    <p><i>Код временного приостановления сертификата (OID):</i> {{ as.hold_instruction_code }}</p>
+    <p><i>Дата признания сертификата недействительным:</i> {{ as.invalidity_date }}</p>
+    <p><i>Имя издателя сертификата, ассоциированного с косвенным САС:</i> {{ as.certificate_issuer }}</p>
+{% endblock content %}

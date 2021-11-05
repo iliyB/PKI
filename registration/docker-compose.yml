@@ -1,0 +1,26 @@
+version: '2'
+services:
+
+  registration-web:
+    restart: always
+    build: .
+    container_name: registration-web
+    command: bash -c "python manage.py runserver 0.0.0.0:8002"
+    volumes:
+      - .:/site
+    ports:
+      - "8002:8002"
+    depends_on:
+      - postgresql-registration
+
+  postgresql-registration:
+    image: postgres:12
+    container_name: db_registration
+    env_file: .env
+    volumes:
+      - db_registration:/var/lib/postgresql/data/pgdata
+    ports:
+      - "5431:5432"
+
+volumes:
+  db_registration:

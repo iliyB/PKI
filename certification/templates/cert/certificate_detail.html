@@ -1,0 +1,24 @@
+{% extends 'cert/base_template.html' %}
+
+
+{% block content %}
+    <p><i>Версия сертификата:</i> {{ certificate.version }}</p>
+    <p><i>Серийный номер сертификата:</i> {{ certificate.serial_number }}</p>
+    <p><i>Идентификатор алгоритма цифровой подписи:</i> {{ certificate.id_algorithm_signature }}</p>
+    <p><i>Имя издателя:</i> {{ certificate.publisher_name }}</p>
+    <p><i>Дата начала действия сертификата:</i> {{ certificate.start_time }}</p>
+    <p><i>Дата конца действия сертификата:</i> {{ certificate.end_time }}</p>
+    <p><i>Имя субъекта сертификата:</i> {{ certificate.subject_name }}</p>
+    <p><i>Публичный ключ субъекта:</i> {{ certificate.public_key }}</p>
+    <p><i>Уникальный идентификатор издателя:</i> {{ certificate.id_publisher }}</p>
+    <p><i>Уникальный идентификатор субъекта:</i> {{ certificate.id_subject }}</p>
+    <p><i>Является ли сертификат действующим:</i> {{ certificate.active }}</p>
+    {% if not certificate.active %}
+    <p><i><br><br>Дата получения запроса об аннулировании</i>: {{ certificate.info_cancellation.revocation_date}}</p>
+    <p><i>Код причины аннулирования</i>: {{ certificate.info_cancellation.reason_code}} - {{ certificate.info_cancellation.reason_code.value}}</p>
+    <p><i>Код временного приостановления сертификата (OID)</i>: {{ certificate.info_cancellation.hold_instruction_code}}</p>
+    <p><i>Дата признания сертификата недействительным</i>: {{ certificate.info_cancellation.invalidity_date}}</p>
+
+    {% endif %}
+
+{% endblock content %}

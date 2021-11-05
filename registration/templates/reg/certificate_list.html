@@ -1,0 +1,30 @@
+{% extends 'reg/base_template.html' %}
+
+
+{% block content %}
+    <div class="row" style="max-width: 100%; min-height: 10%; margin-bottom: 1%;">
+        <a href="{% url 'certificate_list_url' %}" class = "btn btn-primary" style="margin-left: 2%; margin-bottom: 2%; margin-top: 4%">Все</a>
+        <form class="form-inline" style="margin-left: 2%; margin-bottom: 2%; margin-top: 4%">
+            <input class="form-control mr-sm-2" type="search" placeholder="имя субъекта" name="subject" >
+            <button class="btn btn-info" type="submit">Найти</button>
+        </form>
+        <form class="form-inline" style="margin-left: 2%; margin-bottom: 2%; margin-top: 4%">
+            <input class="form-control mr-sm-2" type="search" placeholder="номер сертификата" name="number" >
+            <button class="btn btn-info" type="submit">Найти</button>
+        </form>
+    </div>
+    {% for certificate in object_list %}
+    <div class="card" style="max-width: 100%; min-height: 10%; margin-bottom: 1%;">
+        <div class="card-body">
+            <div style="float: left; max-width: 25%"></div>
+            <div style="float: left; margin-left: 5%">
+                <p class="card-text">Версия сертификата: <b>{{ certificate.version }}</b></p>
+                <p class="card-text">Серийный номер сертификата: <b>{{ certificate.serial_number }}</b></p>
+                <p class="card-text">Дата конца действия сертификата: <b>{{ certificate.end_time }}</b></p>
+                <p class="card-text">Имя субъекта сертификата: <b>{{ certificate.subject_name }}</b></p>
+                <a href="{{ certificate.get_absolute_url }}">Подробнее</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+{% endblock content %}
