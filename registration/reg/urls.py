@@ -1,6 +1,7 @@
 from django.urls import path
 
 from . import views
+from . import rest_views
 
 urlpatterns = [
     path('login/', views.LoginView.as_view(), name='login_url'),
@@ -13,4 +14,9 @@ urlpatterns = [
     path('subjects/<int:pk>', views.SubjectDetailView.as_view(), name='subject_detail_url'),
     path('history-registration/', views.HistoryRegistrationListView.as_view(), name='history_registration_list_url'),
     path('history-get-key/', views.HistoryGetKeyListView.as_view(), name='history_get_key_list_url'),
+
+    path('api/registration/', rest_views.RegistrationView.as_view()),
+    path('api/get-key/', rest_views.GetKeyView.as_view()),
+    path('api/check-key/', rest_views.CheckKeyView.as_view()),
+    path('api/cancellation/', rest_views.CancelledView.as_view()),
 ]

@@ -42,7 +42,30 @@ def cancellation(subject_name: str, code: int) -> None:
             'subject_name':subject_name,
             'code': code
         })
-    
+
+    response.raise_for_status()
+
+    serializer = ResponseCancelledSerializer(data=response.json())
+    serializer.is_valid(raise_exception=True)
+
+    serial_number = serializer.validated_data['serial_number']
+    code = serializer.validated_data['code']
+
+    certificate = Certificate.objects.get(serial_number=serial_number)
+    canc_certificate = As()
+    canc_certificate.certificate_serial_number = certificate.serial_number
+    canc_certificate.reason_code = str(code)
+    canc_certificate.save()
+
+    sas = Sas.objects.all().first()
+    sas.certificate.add(canc_certificate)
+    sas.save()
+    certificate.delete()
+
+    #Отправка информации клиенту об аннулировании
+    return None
+
+
 
 
 

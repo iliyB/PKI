@@ -7,7 +7,7 @@ from .models import *
 from .rest_tasks import *
 
 
-class RequestRegistrationView(APIView):
+class RegistrationView(APIView):
 
     def post(self, request):
         serializer = RequestRegistrationSerializer(data=request.data)
@@ -55,7 +55,7 @@ class CheckKeyView(APIView):
             return Response(data={'status': 'False'}, status=status.HTTP_200_OK)
 
 
-class RequestCancelledView(APIView):
+class CancelledView(APIView):
 
     def post(self, request):
         serializer = RequestCancelledSerializer(data=request.data)
@@ -68,29 +68,7 @@ class RequestCancelledView(APIView):
             subject.address = serializer.validated_data['address']
             subject.save()
 
-            #Отправка запроса на аннулированние
+            cancellation.delay(subject_name, serializer.validated_data['code'])
             return Response(status=status.HTTP_200_OK)
 
         return Response(status=status.HTTP_400_BAD_REQUEST)
-
-
-class ResponseCancelledView(APIView):
-
-    def post(self, request):
-        serializer = ResponseCancelledSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serial_number = serializer.validated_data['serial_number']
-        code = serializer.validated_data['code']
-
-        certificate = Certificate.objects.get(serial_number=serial_number)
-        canc_certificate = As()
-        canc_certificate.certificate_serial_number = certificate.serial_number
-        canc_certificate.reason_code = str(code)
-        canc_certificate.save()
-
-        sas = Sas.objects.all().first()
-        sas.certificate.add(canc_certificate)
-        sas.save()
-        certificate.delete()
-
-        return Response(status=status.HTTP_200_OK)

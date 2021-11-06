@@ -1,5 +1,6 @@
 from datetime import timedelta
-from authentication.auth.models import User
+
+from django.contrib.auth.models import User
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
@@ -8,7 +9,7 @@ from rest_framework import status
 from django.conf import settings
 from .serializers import *
 from .models import *
-from utils import edit_current_time
+from .utils import edit_current_time
 
 
 class RegistrationView(APIView):
