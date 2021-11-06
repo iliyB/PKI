@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework import status
 
 from .serializers import *
-from .models import *
+from .models import Subject
 from .rest_tasks import *
 
 
@@ -29,14 +29,14 @@ class RegistrationView(APIView):
 class GetKeyView(APIView):
 
     def get(self, request):
-        serializer = GetKeySerializer(default=request.data)
+        serializer = GetKeySerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         object_name = serializer.validated_data['object_name']
         subject_name = serializer.validated_data['subject_name']
         if Certificate.objects.filter(subject_name=object_name).exists():
             object, _ = Subject.objects.get_or_create(subject_name=object_name)
             subject, _ = Subject.objects.get_or_create(subject_name=subject_name)
-            HistoryGetKey.objects.create(subjec=subject, object=object)
+            HistoryGetKey.objects.create(subject=subject, object=object)
             certificate = Certificate.objects.get(subject_name=object_name)
             return Response(CertificateSerializer(certificate).data)
         else:

@@ -25,12 +25,9 @@ class CertificateSerializer(serializers.ModelSerializer):
         fields = ('__all__')
 
 
-class GetKeySerializer(serializers.ModelSerializer):
+class GetKeySerializer(serializers.Serializer):
+    subject_name = serializers.CharField(max_length=400)
     object_name = serializers.CharField(max_length=400)
-
-    class Meta:
-         model = Subject
-         fields = ('address', 'subject_name', 'object_name')
 
 
 class CheckKeySerializer(serializers.Serializer):

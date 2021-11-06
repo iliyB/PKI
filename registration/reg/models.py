@@ -9,7 +9,7 @@ class Subject(models.Model):
     )
     subject_name = models.CharField(
         max_length=50,
-        verbose_name="Имя субъекта", blank=True, null=True
+        verbose_name="Имя субъекта", unique=True
     )
     secret_key = models.CharField(
         max_length=50,
@@ -232,7 +232,7 @@ class HistoryGetKey(models.Model):
         Subject,
         verbose_name="Имя объекта",
         on_delete=models.CASCADE,
-        related_name='objects', null=True, blank=True,
+        related_name='object_list', null=True, blank=True,
     )
     attempt_time = models.DateTimeField(
         auto_now_add=True
