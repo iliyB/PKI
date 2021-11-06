@@ -3,6 +3,10 @@ from django.urls import reverse
 
 
 class Subject(models.Model):
+    address = models.CharField(
+        max_length=50,
+        verbose_name="Сетевой адрес субъекта", blank=True, null=True
+    )
     subject_name = models.CharField(
         max_length=50,
         verbose_name="Имя субъекта", blank=True, null=True
@@ -94,7 +98,8 @@ class As(models.Model):
         verbose_name="Серийный номер сертификата"
     )
     revocation_date = models.DateTimeField(
-        verbose_name="Дата получения запроса об аннулировании"
+        verbose_name="Дата получения запроса об аннулировании",
+        auto_now_add=True
     )
     reason_code = models.CharField(
         max_length=5,
@@ -103,14 +108,17 @@ class As(models.Model):
     )
     hold_instruction_code = models.CharField(
         max_length=20,
-        verbose_name="Код временного приостановления сертификата (OID)"
+        verbose_name="Код временного приостановления сертификата (OID)",
+        blank=True, null=True
     )
     invalidity_date = models.DateTimeField(
-        verbose_name="Дата признания сертификата недействительным"
+        verbose_name="Дата признания сертификата недействительным",
+        auto_now_add=True
     )
     certificate_issuer = models.CharField(
         max_length=50,
-        verbose_name="Имя издателя сертификата, ассоциированного с косвенным САС"
+        verbose_name="Имя издателя сертификата, ассоциированного с косвенным САС",
+        blank=True, null=True
     )
 
     def __str__(self):

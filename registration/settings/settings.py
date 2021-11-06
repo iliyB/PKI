@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'rest_framework',
+
     'reg'
 ]
 
@@ -146,3 +148,5 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_IGNORE_RESULT = True
 CELERY_TIMEZONE = 'Europe/Moscow'
+
+CERTIFICATION_ADDRESS = '0.0.0.0:8001'
