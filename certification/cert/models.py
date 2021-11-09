@@ -93,6 +93,10 @@ class Certificate(models.Model):
         related_name="certificate",
         on_delete=models.CASCADE
     )
+    signature = models.CharField(
+        max_length=600,
+        verbose_name="Цифровая электронная подпись сертификата", blank=True, null=True
+    )
 
     def get_absolute_url(self):
         return reverse('certificate_detail_url', kwargs={'pk': self.pk})

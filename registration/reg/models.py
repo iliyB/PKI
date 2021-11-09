@@ -71,6 +71,10 @@ class Certificate(models.Model):
         max_length=200,
         verbose_name="Уникальный идентификатор субъекта", blank=True, null=True
     )
+    signature = models.CharField(
+        max_length=600,
+        verbose_name="Цифровая электронная подпись сертификата", blank=True, null=True
+    )
 
     def get_absolute_url(self):
         return reverse('certificate_detail_url', kwargs={'pk': self.pk})
@@ -119,6 +123,10 @@ class As(models.Model):
         max_length=50,
         verbose_name="Имя издателя сертификата, ассоциированного с косвенным САС",
         blank=True, null=True
+    )
+    signature = models.CharField(
+        max_length=600,
+        verbose_name="Цифровая электронная подпись сертификата", blank=True, null=True
     )
 
     def __str__(self):
