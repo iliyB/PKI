@@ -1,6 +1,5 @@
 import os
 from celery import Celery, platforms
-from celery.schedules import crontab
 from django.conf import settings
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'settings.settings')

@@ -9,7 +9,7 @@ from rest_framework import status
 from django.conf import settings
 from .serializers import *
 from .models import *
-from .utils import edit_current_time
+from .utils import edit_current_time, create_signature
 
 
 class RegistrationView(APIView):
@@ -29,6 +29,17 @@ class RegistrationView(APIView):
             subject_name=subject_name,
             public_key=public_key
         )
+
+        serializer = CertificateSerializer(certificate)
+        serializer.is_valid(raise_exception=True)
+        serializers.validated_data.pop('signature')
+
+        key = ""
+
+        signature = create_signature(key, serializer.validated_data)
+
+        certificate.signature = signature
+        certificate.save()
 
         return Response(CertificateSerializer(certificate).data)
 
