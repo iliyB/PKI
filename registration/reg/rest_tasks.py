@@ -21,7 +21,7 @@ def registration(public_key: str, subject_name: str) -> None:
 
     serializer = CertificateSerializer(data=response.json())
     serializer.is_valid(raise_exception=True)
-    serializer.save()
+    certificate = serializer.save()
 
     subject = Subject.objects.get(subject_name=subject_name)
     HistoryRegistration.objects.create(
@@ -29,7 +29,13 @@ def registration(public_key: str, subject_name: str) -> None:
         certificate_serial_number=serializer.validated_data['serial_number']
     )
 
-    #Отправка сертификата субъекту
+    response = requests.post(
+        f'{settings.CLIENT_ADDRESS}/api/registration/',
+        data=CertificateSerializer(certificate).data
+    )
+
+    response.raise_for_status()
+
     return None
 
 
@@ -62,7 +68,16 @@ def cancellation(subject_name: str, code: int) -> None:
     sas.save()
     certificate.delete()
 
-    #Отправка информации клиенту об аннулировании
+    response = requests.post(
+        f'{settings.CLIENT_ADDRESS}/api/cancellation/',
+        data={
+            'serial_number': serial_number,
+            'code': code
+        }
+    )
+
+    response.raise_for_status()
+
     return None
 
 

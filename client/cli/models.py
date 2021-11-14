@@ -1,3 +1,4 @@
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 
@@ -59,3 +60,30 @@ class Certificate(models.Model):
     class Meta:
         verbose_name = 'Сертификат'
         verbose_name_plural = 'Сертификаты'
+
+
+class User(AbstractUser):
+
+    certificate =models.OneToOneField(
+        Certificate,
+        verbose_name="Cертификат пользователя",
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+        related_name='certificate'
+    )
+    certificates = models.ManyToManyField(
+        Certificate,
+        verbose_name="Сертификаты субъектов",
+        blank=True,
+        null=True,
+        related_name='subject_sertificates'
+    )
+
+    def __str__(self):
+        return self.email
+
+    class Meta:
+        verbose_name = 'Пользователь'
+        verbose_name_plural = 'Пользователи'
+

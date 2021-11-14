@@ -1,0 +1,26 @@
+version: '2'
+services:
+
+  client-web:
+    restart: always
+    build: .
+    container_name: client-web
+    command: bash -c "python manage.py runserver 0.0.0.0:8005"
+    volumes:
+      - .:/site
+    ports:
+      - "8005:8005"
+    depends_on:
+      - postgresql-client
+
+  postgresql-client:
+    image: postgres:12
+    container_name: db_client
+    env_file: .env
+    volumes:
+      - db_client:/var/lib/postgresql/data/pgdata
+    ports:
+      - "5434:5432"
+
+volumes:
+  db_client:

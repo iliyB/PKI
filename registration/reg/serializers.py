@@ -8,7 +8,7 @@ class RequestRegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Subject
-        fields = ('__all__')
+        exclude = ('address',)
 
 
 # class SendRegistrationSerializer(serializers.ModelSerializer):
@@ -39,7 +39,7 @@ class RequestCancelledSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Subject
-        fields = ('__all__')
+        exclude = ('address',)
 
 
 class ResponseCancelledSerializer(serializers.Serializer):
