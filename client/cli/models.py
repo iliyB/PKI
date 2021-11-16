@@ -1,3 +1,5 @@
+from typing import List
+
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -70,15 +72,18 @@ class User(AbstractUser):
         on_delete=models.CASCADE,
         blank=True,
         null=True,
-        related_name='certificate'
+        related_name='user'
     )
     certificates = models.ManyToManyField(
         Certificate,
         verbose_name="Сертификаты субъектов",
         blank=True,
         null=True,
-        related_name='subject_sertificates'
+        related_name='subject_user'
     )
+
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS: List = []
 
     def __str__(self):
         return self.email

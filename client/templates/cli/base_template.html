@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <title>
+        {% block title %}
+            Registration centre
+        {% endblock %}
+    </title>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'my_certificate_url' %}" style="margin-right: 2%;">Мой сертификат</a>
+            <a class="navbar-brand" href="{% url 'subject_certificates_url' %}" style="margin-right: 2%;">Сертификаты субъектов</a>
+            <a class="navbar-brand" href="{% url 'encrypt_url' %}" style="margin-right: 2%;">Зашифровать</a>
+            <a class="navbar-brand" href="{% url 'decrypt_url' %}" style="margin-right: 2%;">Расшифровать</a>
+
+
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{% url 'logout_url' %}">выйти</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-10" style="margin-top: 2%;">
+        <div class="row">
+            <div class="col-10 offset-md-1" style="">
+                {% block content %}
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

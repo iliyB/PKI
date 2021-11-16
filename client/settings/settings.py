@@ -123,7 +123,7 @@ USE_L10N = True
 USE_TZ = True
 
 LOGIN_URL = '/login/'
-# LOGIN_REDIRECT_URL = 'certificate_list_url'
+LOGIN_REDIRECT_URL = 'my_certificate_url'
 LOGOUT_URL = '/logout/'
 
 # Static files (CSS, JavaScript, Images)
