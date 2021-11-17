@@ -17,10 +17,10 @@ class CustomUserAdmin(UserAdmin):
         (None, {'fields': (
             'username', 'email', 'password', 'first_name',
             'last_name', 'is_active', 'certificate', 'certificates',
-            'date_joined', 'last_login'
+            'date_joined', 'last_login', 'secret_key'
         )}),
     )
-    readonly_fields = ('date_joined', 'last_login')
+    readonly_fields = ('date_joined', 'last_login', 'secret_key')
 
 
 admin.site.register(Certificate)

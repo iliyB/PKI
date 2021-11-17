@@ -1,7 +1,9 @@
 from typing import List
 
+from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.urls import reverse
 
 
 class Certificate(models.Model):
@@ -56,6 +58,9 @@ class Certificate(models.Model):
     # def get_absolute_url(self):
     #     return reverse('certificate_detail_url', kwargs={'pk': self.pk})
 
+    def get_check_url(self):
+        return reverse('check_key_url', kwargs={'pk': self.pk})
+
     def __str__(self):
         return self.serial_number
 
@@ -80,6 +85,11 @@ class User(AbstractUser):
         blank=True,
         null=True,
         related_name='subject_user'
+    )
+    secret_key = models.CharField(
+        max_length=40,
+        blank=True,
+        default=BaseUserManager.make_random_password(40)
     )
 
     USERNAME_FIELD = 'username'

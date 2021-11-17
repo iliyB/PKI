@@ -1,17 +1,24 @@
 {% extends 'cli/base_template.html' %}
 
 {% block content %}
-    {% for certificate in object_list %}
+    {% if object_list.first %}
     <div class="card" style="max-width: 100%; min-height: 10%; margin-bottom: 1%;">
         <div class="card-body">
             <div style="float: left; max-width: 25%"></div>
             <div style="float: left; margin-left: 5%">
-                <p class="card-text">Версия сертификата: <b>{{ certificate.version }}</b></p>
-                <p class="card-text">Серийный номер сертификата: <b>{{ certificate.serial_number }}</b></p>
-                <p class="card-text">Дата конца действия сертификата: <b>{{ certificate.end_time }}</b></p>
-                <p class="card-text">Имя субъекта сертификата: <b>{{ certificate.subject_name }}</b></p>
+                <p class="card-text">Версия сертификата: <b>{{ object_list.first.version }}</b></p>
+                <p class="card-text">Серийный номер сертификата: <b>{{ object_list.first.serial_number }}</b></p>
+                <p class="card-text">Дата конца действия сертификата: <b>{{ object_list.first.end_time }}</b></p>
+                <p class="card-text">Имя субъекта сертификата: <b>{{ object_list.first.subject_name }}</b></p>
+                <a class="btn btn-danger" href="{% url 'cancellation_url' %}">Аннулировать</a>
             </div>
         </div>
     </div>
-    {% endfor %}
+    {% else %}
+        <div class="card" style="max-width: 100%; min-height: 10%; margin-bottom: 1%;">
+        <div class="card-body">
+            <a class="btn btn-info">Зарегистрировать новый сертификат</a>
+        </div>
+    </div>
+    {% endif %}
 {% endblock content %}

@@ -136,7 +136,7 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-REDIS_HOST = 'redis-registration'
+REDIS_HOST = 'redis-client'
 REDIS_PORT = '6379'
 
 CELERY_BROKER_URL = 'redis://' + REDIS_HOST + ":" + REDIS_PORT + '/0'

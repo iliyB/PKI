@@ -22,5 +22,38 @@ services:
     ports:
       - "5434:5432"
 
+  celery-client:
+    restart: unless-stopped
+    build: .
+    command: celery -A settings.celery worker -l info --loglevel=debug --concurrency=2
+    container_name: celery_client
+    volumes:
+      - .:/app
+    links:
+      - postgresql-client
+    depends_on:
+      - client-web
+      - postgresql-client
+      - redis-client
+
+  flower-client:
+    build: .
+    env_file: .env
+    command: /bin/bash -c "sleep 6 && celery flower -A settings.celery --port=7555 --basic_auth=admin:admin --pidfile /tmp/celery.pid"
+    container_name: flower_client
+    volumes:
+      - .:/app
+    ports:
+      - "5555:5555"
+    depends_on:
+      - postgresql-client
+      - redis-client
+
+  redis-client:
+    image: "redis:alpine"
+    container_name: redis-client
+    ports:
+      - "6379:6379"
+
 volumes:
   db_client:
