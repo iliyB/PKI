@@ -43,11 +43,11 @@ class CancelledView(LoginRequiredMixin, View):
         return redirect('subject_certificates_url')
 
 
-# class RegistrationCertificateView(LoginRequiredMixin, View):
-#
-#     def get(self, request):
-#         form = AddSubjectCertificateForm()
-#         return render(request, )
+class RegistrationCertificateView(LoginRequiredMixin, View):
+
+    def get(self, request):
+        
+        return render(request, )
 
 
 class MySubjectCertificateView(LoginRequiredMixin, ListView):

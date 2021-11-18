@@ -1,5 +1,8 @@
 from typing import List
 
+from Crypto.PublicKey import RSA
+
+from django.core.files.base import ContentFile
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser
 from django.db import models
@@ -91,6 +94,11 @@ class User(AbstractUser):
         blank=True,
         default=BaseUserManager.make_random_password(40)
     )
+    private_key = models.FileField(
+        upload_to="private_key",
+        null=True,
+        blank=True,
+    )
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS: List = []
@@ -101,4 +109,14 @@ class User(AbstractUser):
     class Meta:
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
+
+    def save(self, *args, **kwargs):
+        super(User, self).save(*args, **kwargs)
+        if not self.private_key:
+            private_key = RSA.generate(2024)
+            self.private_key.save(
+                f'{self.username}.pem',
+                ContentFile(private_key.export_key('PEM')),
+                save=True
+            )
 
