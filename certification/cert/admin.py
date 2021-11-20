@@ -13,4 +13,4 @@ class CertificateAdmin(admin.ModelAdmin):
 
 @admin.register(Key)
 class KeyAdmin(admin.ModelAdmin):
-    list_display = ('active',)
+    list_display = ('type', 'active')

@@ -13,3 +13,4 @@ celery~=4.4.7
 kombu==4.6.11
 djangorestframework
 requests
+pycryptodome==3.11.0

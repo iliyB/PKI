@@ -6,4 +6,5 @@ WORKDIR /site
 COPY ./requirements.txt /site/
 RUN pip install -r requirements.txt
 EXPOSE 8005
+EXPOSE 8002
 COPY . /site/

@@ -6,7 +6,7 @@ from .models import Certificate
 class RequestRegistrationSerializer(serializers.Serializer):
     subject_name = serializers.CharField(max_length=50)
     secret_key = serializers.CharField(max_length=50)
-    public_key = serializers.CharField(max_length=400)
+    public_key = serializers.CharField(max_length=500)
 
 
 class RequestCancelledSerializer(serializers.Serializer):

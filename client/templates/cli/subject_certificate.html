@@ -1,7 +1,7 @@
 {% extends 'cli/base_template.html' %}
 
 {% block content %}
-    <form class="form-inline" action="{% url ''}" style="margin-left: 2%; margin-bottom: 2%; margin-top: 4%">
+    <form class="form-inline" action="{% url 'get_key_url' %}" style="margin-left: 2%; margin-bottom: 2%; margin-top: 4%">
         <input class="form-control mr-sm-2" type="search" placeholder="имя субъекта" name="subject">
         <button class="btn btn-success" type="submit">Запросить сертификат</button>
     </form>

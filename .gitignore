@@ -1,0 +1,41 @@
+*.py[cod]
+venv/*
+media/user_images/*
+staticfiles/*
+
+__pycache__/
+
+*.sql
+
+celerybeat.pid
+celerybeat-schedule
+
+
+
+# Node artifact files
+node_modules/
+dist/
+
+# Log files
+*.log
+
+# Package files
+*.jar
+
+# JetBrains IDE
+.idea/
+
+# Applications
+*.app
+*.exe
+*.war
+
+# Large media files
+*.mp4
+*.tiff
+*.avi
+*.flv
+*.mov
+*.wmv
+
+rsa text/

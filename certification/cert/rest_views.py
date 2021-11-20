@@ -30,16 +30,15 @@ class RegistrationView(APIView):
             public_key=public_key
         )
 
-        serializer = CertificateSerializer(certificate)
-        serializer.is_valid(raise_exception=True)
-        serializers.validated_data.pop('signature')
-
-        key = ""
-
-        signature = create_signature(key, serializer.validated_data)
-
-        certificate.signature = signature
-        certificate.save()
+        # serializer = CertificateSerializer(certificate).data
+        # serializer.pop('signature')
+        #
+        # key = ""
+        #
+        # signature = create_signature(key, serializer)
+        #
+        # certificate.signature = signature
+        # certificate.save()
 
         return Response(CertificateSerializer(certificate).data)
 

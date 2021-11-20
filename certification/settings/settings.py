@@ -137,6 +137,9 @@ LOGOUT_URL = '/logout/'
 
 STATIC_URL = '/static/'
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, MEDIA_URL)
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
@@ -156,4 +159,4 @@ CELERY_TIMEZONE = 'Europe/Moscow'
 
 
 CERTIFICATION_NAME = 'pki_lab'
-
+REGISTRATION_ADDRESS = 'http://registration-web:8002'

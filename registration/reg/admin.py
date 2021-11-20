@@ -2,7 +2,10 @@ from django.contrib import admin
 
 from .models import Key, Sas, As, Certificate, Subject, HistoryRegistration, HistoryGetKey
 
-admin.site.register(Key)
+
+@admin.register(Key)
+class KeyAdmin(admin.ModelAdmin):
+    list_display = ('type', 'active')
 
 
 @admin.register(Certificate)

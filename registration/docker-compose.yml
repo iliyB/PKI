@@ -69,3 +69,8 @@ services:
 
 volumes:
   db_registration:
+
+networks:
+  default:
+    external:
+      name: pki_network

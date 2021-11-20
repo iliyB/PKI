@@ -132,6 +132,9 @@ LOGOUT_URL = '/logout/'
 
 STATIC_URL = '/static/'
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, MEDIA_URL)
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
@@ -149,5 +152,5 @@ CELERY_RESULT_SERIALIZER = 'json'
 CELERY_IGNORE_RESULT = True
 CELERY_TIMEZONE = 'Europe/Moscow'
 
-CERTIFICATION_ADDRESS = '0.0.0.0:8001'
-CLIENT_ADDRESS = '0.0.0.0:8005'
+CERTIFICATION_ADDRESS = 'http://certification-web:8001'
+CLIENT_ADDRESS = 'http://client-web:8005'

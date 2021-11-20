@@ -3,12 +3,11 @@ from rest_framework import serializers
 from .models import Subject, Certificate
 
 
-class RequestRegistrationSerializer(serializers.ModelSerializer):
-    public_key = serializers.CharField(max_length=400)
+class RequestRegistrationSerializer(serializers.Serializer):
+    public_key = serializers.CharField(max_length=500)
+    subject_name = serializers.CharField(max_length=100)
+    secret_key = serializers.CharField(max_length=100)
 
-    class Meta:
-        model = Subject
-        exclude = ('address',)
 
 
 # class SendRegistrationSerializer(serializers.ModelSerializer):
@@ -34,12 +33,10 @@ class CheckKeySerializer(serializers.Serializer):
     serial_number = serializers.CharField(max_length=400)
 
 
-class RequestCancelledSerializer(serializers.ModelSerializer):
+class RequestCancelledSerializer(serializers.Serializer):
     code = serializers.IntegerField()
-
-    class Meta:
-        model = Subject
-        exclude = ('address',)
+    subject_name = serializers.CharField(max_length=400)
+    secret_key = serializers.CharField(max_length=100)
 
 
 class ResponseCancelledSerializer(serializers.Serializer):

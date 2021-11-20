@@ -56,7 +56,7 @@ services:
     volumes:
       - .:/app
     ports:
-      - "5555:5555"
+      - "8555:5555"
     depends_on:
       - postgresql-certification
       - redis-certification
@@ -65,8 +65,13 @@ services:
     image: "redis:alpine"
     container_name: redis-certification
     ports:
-      - "6379:6379"
+      - "6381:6379"
 
 
 volumes:
   db_certification:
+
+networks:
+  default:
+    external:
+      name: pki_network

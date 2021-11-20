@@ -9,6 +9,6 @@ urlpatterns = [
     path('', views.CertificateListView.as_view(), name='certificate_list_url'),
     path('<int:pk>', views.CertificateDetailView.as_view(), name='certificate_detail_url'),
 
-    path('api/registration', rest_views.RegistrationView.as_view()),
-    path('api/cancellation', rest_views.CancelledView.as_view())
+    path('api/registration/', rest_views.RegistrationView.as_view()),
+    path('api/cancellation/', rest_views.CancelledView.as_view())
 ]

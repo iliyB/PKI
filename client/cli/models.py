@@ -42,7 +42,7 @@ class Certificate(models.Model):
         verbose_name="Имя субъекта сертификата", blank=True, null=True
     )
     public_key = models.CharField(
-        max_length=200,
+        max_length=500,
         verbose_name="Публичный ключ субъекта", blank=True, null=True
     )
     id_publisher = models.CharField(
@@ -65,7 +65,7 @@ class Certificate(models.Model):
         return reverse('check_key_url', kwargs={'pk': self.pk})
 
     def __str__(self):
-        return self.serial_number
+        return self.serial_number or ''
 
     class Meta:
         verbose_name = 'Сертификат'
@@ -77,7 +77,7 @@ class User(AbstractUser):
     certificate =models.OneToOneField(
         Certificate,
         verbose_name="Cертификат пользователя",
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
         blank=True,
         null=True,
         related_name='user'
@@ -104,7 +104,7 @@ class User(AbstractUser):
     REQUIRED_FIELDS: List = []
 
     def __str__(self):
-        return self.email
+        return self.username
 
     class Meta:
         verbose_name = 'Пользователь'
@@ -120,3 +120,23 @@ class User(AbstractUser):
                 save=True
             )
 
+
+class Key(models.Model):
+    public_key = models.FileField(upload_to="public", blank=True, null=True)
+    private_key = models.FileField(upload_to="private", blank=True, null=True)
+    active = models.BooleanField(
+        default=True, blank=True
+    )
+
+    class KeyType(models.TextChoices):
+        Reg = "Ключ регистрационного центра"
+        Cert = "Ключ сертификационного центра"
+
+    type = models.CharField(
+        max_length=100,
+        choices=KeyType.choices,
+        blank = True, null = True
+    )
+
+    def __str__(self):
+        return self.type

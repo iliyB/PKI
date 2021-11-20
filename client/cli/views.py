@@ -7,6 +7,8 @@ from django.shortcuts import redirect, render
 from django.views import View
 from django.views.generic import ListView
 
+from Crypto.PublicKey import RSA
+
 from .models import Certificate
 from .forms import AddSubjectCertificateForm
 from .rest_tasks import *
@@ -46,8 +48,17 @@ class CancelledView(LoginRequiredMixin, View):
 class RegistrationCertificateView(LoginRequiredMixin, View):
 
     def get(self, request):
-        
-        return render(request, )
+        user = request.user
+        private_key = RSA.import_key(
+            open(user.private_key.path).read(),
+        )
+        public_key = private_key.public_key().export_key('PEM')
+        registration.delay(
+            subject_name = user.username,
+            public_key = public_key.decode(),
+            secret_key = user.secret_key
+        )
+        return redirect('subject_certificates_url')
 
 
 class MySubjectCertificateView(LoginRequiredMixin, ListView):
@@ -68,6 +79,21 @@ class CheckKeyView(LoginRequiredMixin, View):
         )
         return redirect('subject_certificates_url')
 
+
+class GetKeyView(LoginRequiredMixin, View):
+
+    def get(self, request):
+        subject = request.GET.get('subject', None)
+
+        if subject is not "":
+
+            get_key.delay(
+                subject_name = request.user.username,
+                object_name = subject
+            )
+            return redirect('subject_certificates_url')
+
+        return redirect('subject_certificates_url')
 
 
 class EncryptFileView(LoginRequiredMixin, View):

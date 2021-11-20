@@ -43,7 +43,7 @@ def registration(public_key: str, subject_name: str) -> None:
 def cancellation(subject_name: str, code: int) -> None:
 
     response = requests.post(
-        f'{settings.CERTIFICATION_ADDRESS}/api/cancellation',
+        f'{settings.CERTIFICATION_ADDRESS}/api/cancellation/',
         data={
             'subject_name':subject_name,
             'code': code
