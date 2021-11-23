@@ -1,4 +1,5 @@
 import requests
+from Crypto.PublicKey import RSA
 
 from django.conf import settings
 
@@ -81,6 +82,29 @@ def cancellation(subject_name: str, code: int) -> None:
     return None
 
 
+@app.task
+def send_key():
+
+    key = Key.objects.filter(
+        active=True,
+        type=Key.KeyType.Reg
+    ).first()
+
+
+    public_key = RSA.import_key(
+        open(key.public_key.path).read()
+    )
+
+    public_key = public_key.export_key('PEM').decode()
+
+    response = requests.post(
+        f'{settings.CERTIFICATION_ADDRESS}/api/reg-key/',
+        data={
+            'key': public_key
+        }
+    )
+
+    response.raise_for_status()
 
 
 

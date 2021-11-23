@@ -1,5 +1,6 @@
 import os
 from celery import Celery, platforms
+from celery.schedules import crontab
 from django.conf import settings
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'settings.settings')
@@ -11,3 +12,11 @@ app = Celery(
 
 app.config_from_object('django.conf:settings', namespace='CELERY')
 app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
+
+
+app.conf.beat_schedule = {
+    'send-key-for-certificate': {
+        'task': 'reg.rest_tasks.send_key',
+        'schedule': crontab(minute='*/1'),
+    },
+}

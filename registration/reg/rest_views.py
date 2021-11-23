@@ -1,3 +1,4 @@
+from django.core.files.base import ContentFile
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
@@ -71,3 +72,25 @@ class CancelledView(APIView):
             return Response(status=status.HTTP_200_OK)
 
         return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+class GetCertificationKeyView(APIView):
+
+    def post(self, request, *args, **kwargs):
+        public_key = request.data.get('key')
+
+        key, created = Key.objects.get_or_create(
+            active=True,
+            type=Key.KeyType.Cert
+        )
+
+        if not created:
+            return Response(status=200)
+
+        key.public_key.save(
+            f'public_key.pem',
+            ContentFile(bytes(public_key, encoding='utf8')),
+            save=True
+        )
+
+        return Response(status=200)

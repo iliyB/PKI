@@ -17,5 +17,6 @@ urlpatterns = [
     path('get-key/', views.GetKeyView.as_view(), name='get_key_url'),
 
     path('api/registration/', rest_views.RegistrationView.as_view()),
-    path('api/cancellation/', rest_views.CancelledView.as_view())
+    path('api/cancellation/', rest_views.CancelledView.as_view()),
+    path('api/cert-key/', rest_views.GetCertificationKeyView.as_view())
 ]
