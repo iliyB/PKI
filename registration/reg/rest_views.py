@@ -94,3 +94,21 @@ class GetCertificationKeyView(APIView):
         )
 
         return Response(status=200)
+
+
+class PeriodicCancellationView(APIView):
+
+    def post(self, request, *args, **kwargs):
+        array = request.data.get('array')
+
+        for serial_number in array:
+            certificate = Certificate.objects.get(serial_number=serial_number)
+            canc_certificate = As()
+            canc_certificate.certificate_serial_number = certificate.serial_number
+            canc_certificate.reason_code = "6"
+            canc_certificate.save()
+
+            sas = Sas.objects.all().first()
+            sas.certificate.add(canc_certificate)
+            sas.save()
+            certificate.delete()

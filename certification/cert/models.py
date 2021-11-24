@@ -94,7 +94,7 @@ class Certificate(models.Model):
         on_delete=models.CASCADE
     )
     signature = models.CharField(
-        max_length=600,
+        max_length=2000,
         verbose_name="Цифровая электронная подпись сертификата", blank=True, null=True
     )
 

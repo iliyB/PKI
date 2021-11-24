@@ -1,5 +1,6 @@
 from datetime import timedelta
 
+from Crypto.PublicKey import RSA
 from django.contrib.auth.models import User
 from django.core.files.base import ContentFile
 from rest_framework.response import Response
@@ -31,15 +32,31 @@ class RegistrationView(APIView):
             public_key=public_key
         )
 
-        # serializer = CertificateSerializer(certificate).data
-        # serializer.pop('signature')
-        #
-        # key = ""
-        #
-        # signature = create_signature(key, serializer)
-        #
-        # certificate.signature = signature
-        # certificate.save()
+        sign = {
+            'serial_number': certificate.serial_number,
+            'id_algorithm_signature': certificate.id_algorithm_signature,
+            'publisher_name': certificate.publisher_name,
+            'start_time': certificate.start_time,
+            'end_time': certificate.end_time,
+            'subject_name': certificate.subject_name,
+            'public_key': certificate.public_key,
+        }
+
+        key = Key.objects.filter(
+            active=True,
+            type=Key.KeyType.Cert
+        ).first()
+
+        private_key = RSA.import_key(
+            open(key.private_key.path).read()
+        )
+
+        signature = create_signature(private_key, sign)
+
+
+
+        certificate.signature = signature
+        certificate.save()
 
         return Response(CertificateSerializer(certificate).data)
 

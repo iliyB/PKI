@@ -23,6 +23,10 @@ app.conf.beat_schedule = {
     'send-key-for-registration': {
         'task': 'cert.rest_tasks.send_key_cli',
         'schedule': crontab(minute='*/1'),
+    },
+    'periodic-cancellation': {
+        'task': 'cert.rest_task.periodic_cancellation',
+        'schedule': crontab(minute=0, hour=0)
     }
 }
 
