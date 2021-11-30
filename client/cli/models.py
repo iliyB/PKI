@@ -140,3 +140,11 @@ class Key(models.Model):
 
     def __str__(self):
         return self.type
+
+
+class File(models.Model):
+    source_file = models.FileField(upload_to="source_file", blank=True, null=True)
+    new_file = models.FileField(upload_to="new_file", blank=True, null=True)
+
+    def __str__(self):
+        return str(self.pk)

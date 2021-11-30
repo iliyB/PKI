@@ -2,8 +2,7 @@ from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin
 
-from .models import Certificate, Key
-
+from .models import Certificate, Key, File
 
 User = get_user_model()
 
@@ -30,5 +29,6 @@ class KeyAdmin(admin.ModelAdmin):
 
 admin.site.register(Certificate)
 admin.site.register(User, CustomUserAdmin)
+admin.site.register(File)
 
 

@@ -1,0 +1,33 @@
+{% extends 'cli/base_template.html' %}
+
+{% block content %}
+    <div class="card" style="max-width: 100%; min-height: 10%; margin-bottom: 1%;">
+        <div class="card-body">
+            <h3>Введите имя субъекта и выберите файл для шифрования</h3>
+            {% if form %}
+            <form action="{% url 'encrypt_url' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                {% for field in form %}
+                <div class="form-group">
+                    {% if field.errors %}
+                    <div class="alert aler-danger">
+                        {{ field.errors }}
+                    </div>
+                    {% endif %}
+
+                    {{ field.label }}
+                    {{ field }}
+                </div>
+                {% endfor %}
+
+                <button type="submit" class="btn btn-success">
+                    Upload
+                </button>
+            </form>
+            {% else %}
+            <a href="{{ file.source_file.url }}" class="btn btn-success" download>Download</a>
+            {% endif %}
+        </div>
+    </div>
+{% endblock content %}

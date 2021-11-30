@@ -9,8 +9,8 @@ from django.views.generic import ListView
 
 from Crypto.PublicKey import RSA
 
-from .models import Certificate
-from .forms import AddSubjectCertificateForm
+from .models import Certificate, File
+from .forms import AddSubjectCertificateForm, FileForm
 from .rest_tasks import *
 
 
@@ -97,8 +97,48 @@ class GetKeyView(LoginRequiredMixin, View):
 
 
 class EncryptFileView(LoginRequiredMixin, View):
-    pass
+
+    def get(self, request, *args, **kwargs):
+         return render(request, 'cli/encrypt.html', context={'form': FileForm()})
+
+    def post(self, request, *args, **kwargs):
+        form = FileForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            subject_name = form.cleaned_data.pop('subject_name')
+
+            user = request.user
+
+            if not user.certificates.filter(subject_name=subject_name).exists():
+                form.add_error('subject_name', 'Нет сертификата данного пользователя')
+                return render(request, 'cli/encrypt.html', context={'form': form})
+
+            instance = form.save()
+            return render(request, 'cli/encrypt.html', context={'file': instance})
+
+        return render(request, 'cli/encrypt.html', context={'form': form})
+
+
 
 
 class DecryptFileView(LoginRequiredMixin, View):
-    pass
+
+    def get(self, request, *args, **kwargs):
+        return render(request, 'cli/decrypt.html', context={'form': FileForm()})
+
+    def post(self, request, *args, **kwargs):
+        form = FileForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            subject_name = form.cleaned_data.pop('subject_name')
+
+            user = request.user
+
+            if not user.certificates.filter(subject_name=subject_name).exists():
+                form.add_error('subject_name', 'Нет сертификата данного пользователя')
+                return render(request, 'cli/decrypt.html', context={'form': form})
+
+            instance = form.save()
+            return render(request, 'cli/decrypt.html', context={'file': instance})
+
+        return render(request, 'cli/decrypt.html', context={'form': form})
