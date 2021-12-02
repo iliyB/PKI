@@ -4,6 +4,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.shortcuts import redirect, render
+from django.utils import timezone
 from django.views import View
 from django.views.generic import ListView
 
@@ -12,6 +13,8 @@ from Crypto.PublicKey import RSA
 from .models import Certificate, File
 from .forms import AddSubjectCertificateForm, FileForm
 from .rest_tasks import *
+from .utils import edit_current_time
+from .tasks import delete_file
 
 
 class LoginUser(LoginView):
@@ -125,6 +128,7 @@ class EncryptFileView(LoginRequiredMixin, View):
             )
 
             instance.encrypt(private_key, public_key)
+            delete_file.delay(instance.pk, eta=edit_current_time() + timezone.timedelta(minutes=30))
 
             return render(request, 'cli/encrypt.html', context={'file': instance})
 
@@ -162,6 +166,7 @@ class DecryptFileView(LoginRequiredMixin, View):
 
             if not instance.decrypt(private_key, public_key):
                 form.add_error('subject_name', 'Электронная подпись не совпадает')
+            delete_file.delay(instance.pk, eta=edit_current_time() + timezone.timedelta(minutes=30))
 
             return render(request, 'cli/decrypt.html', context={'form': form, 'file': instance})
 

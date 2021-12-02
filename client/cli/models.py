@@ -1,3 +1,4 @@
+import os
 from typing import List
 
 from Crypto.PublicKey import RSA
@@ -173,4 +174,13 @@ class File(models.Model):
         )
 
         return b
+
+    def delete(self,*args,**kwargs):
+        if os.path.isfile(self.source_file.path):
+            os.remove(self.source_file.path)
+
+        if os.path.isfile(self.new_file.path):
+            os.remove(self.new_file.path)
+
+        super(File, self).delete(*args,**kwargs)
 
