@@ -10,7 +10,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.urls import reverse
 
-from PKI.client.cli.file_utils import encrypt_file, decrypt_file
+from cli.file_utils import encrypt_file, decrypt_file
 
 
 class Certificate(models.Model):
@@ -117,7 +117,7 @@ class User(AbstractUser):
     def save(self, *args, **kwargs):
         super(User, self).save(*args, **kwargs)
         if not self.private_key:
-            private_key = RSA.generate(2024)
+            private_key = RSA.generate(2048)
             self.private_key.save(
                 f'{self.username}.pem',
                 ContentFile(private_key.export_key('PEM')),
@@ -157,7 +157,7 @@ class File(models.Model):
 
         byte = encrypt_file(self.source_file.path, private_key, public_key)
         self.new_file.save(
-            f'{str(get_user_model().objects.get_random_password())}',
+            f'{str(get_user_model().objects.make_random_password())}',
             ContentFile(bytes(byte)),
             save=True
         )
@@ -168,7 +168,7 @@ class File(models.Model):
         b, byte = decrypt_file(self.source_file.path, private_key, public_key)
 
         self.new_file.save(
-            f'{str(get_user_model().objects.get_random_password())}',
+            f'{str(get_user_model().objects.make_random_password())}',
             ContentFile(bytes(byte)),
             save=True
         )

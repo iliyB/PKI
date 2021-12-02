@@ -5,7 +5,7 @@
         <div class="card-body">
             <h3>Введите имя субъекта и выберите файл для дешифрования</h3>
             {% if form %}
-            <form action="{% url 'encrypt_url' %}" method="post" enctype="multipart/form-data">
+            <form action="{% url 'decrypt_url' %}" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
 
                 {% for field in form %}
@@ -27,6 +27,7 @@
             </form>
             {% endif %}
             {% if file %}
+            <br><br>
             <a href="{{ file.new_file.url }}" class="btn btn-success" download>Download</a>
             {% endif %}
         </div>

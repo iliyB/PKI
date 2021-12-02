@@ -128,7 +128,7 @@ class EncryptFileView(LoginRequiredMixin, View):
             )
 
             instance.encrypt(private_key, public_key)
-            delete_file.delay(instance.pk, eta=edit_current_time() + timezone.timedelta(minutes=30))
+            delete_file.apply_async([instance.pk], eta=edit_current_time() + timezone.timedelta(minutes=30))
 
             return render(request, 'cli/encrypt.html', context={'file': instance})
 
@@ -166,7 +166,7 @@ class DecryptFileView(LoginRequiredMixin, View):
 
             if not instance.decrypt(private_key, public_key):
                 form.add_error('subject_name', 'Электронная подпись не совпадает')
-            delete_file.delay(instance.pk, eta=edit_current_time() + timezone.timedelta(minutes=30))
+            delete_file.apply_async([instance.pk], eta=edit_current_time() + timezone.timedelta(minutes=30))
 
             return render(request, 'cli/decrypt.html', context={'form': form, 'file': instance})
 
