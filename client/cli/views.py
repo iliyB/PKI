@@ -108,17 +108,27 @@ class EncryptFileView(LoginRequiredMixin, View):
             subject_name = form.cleaned_data.pop('subject_name')
 
             user = request.user
+            subject_certificate = user.certificates.filter(subject_name=subject_name)
 
-            if not user.certificates.filter(subject_name=subject_name).exists():
+            if not subject_certificate.exists():
                 form.add_error('subject_name', 'Нет сертификата данного пользователя')
                 return render(request, 'cli/encrypt.html', context={'form': form})
 
             instance = form.save()
+
+            private_key = RSA.import_key(
+                open(user.private_key.path).read()
+            )
+
+            public_key = RSA.import_key(
+                subject_certificate.last().public_key
+            )
+
+            instance.encrypt(private_key, public_key)
+
             return render(request, 'cli/encrypt.html', context={'file': instance})
 
         return render(request, 'cli/encrypt.html', context={'form': form})
-
-
 
 
 class DecryptFileView(LoginRequiredMixin, View):
@@ -134,11 +144,25 @@ class DecryptFileView(LoginRequiredMixin, View):
 
             user = request.user
 
-            if not user.certificates.filter(subject_name=subject_name).exists():
+            subject_certificate = user.certificates.filter(subject_name=subject_name)
+
+            if not subject_certificate.exists():
                 form.add_error('subject_name', 'Нет сертификата данного пользователя')
                 return render(request, 'cli/decrypt.html', context={'form': form})
 
             instance = form.save()
-            return render(request, 'cli/decrypt.html', context={'file': instance})
+
+            private_key = RSA.import_key(
+                open(user.private_key.path).read()
+            )
+
+            public_key = RSA.import_key(
+                subject_certificate.last().public_key
+            )
+
+            if not instance.decrypt(private_key, public_key):
+                form.add_error('subject_name', 'Электронная подпись не совпадает')
+
+            return render(request, 'cli/decrypt.html', context={'form': form, 'file': instance})
 
         return render(request, 'cli/decrypt.html', context={'form': form})

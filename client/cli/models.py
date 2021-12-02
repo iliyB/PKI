@@ -1,12 +1,15 @@
 from typing import List
 
 from Crypto.PublicKey import RSA
+from django.contrib.auth import get_user_model
 
 from django.core.files.base import ContentFile
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.urls import reverse
+
+from PKI.client.cli.file_utils import encrypt_file, decrypt_file
 
 
 class Certificate(models.Model):
@@ -148,3 +151,26 @@ class File(models.Model):
 
     def __str__(self):
         return str(self.pk)
+
+    def encrypt(self, private_key, public_key):
+
+        byte = encrypt_file(self.source_file.path, private_key, public_key)
+        self.new_file.save(
+            f'{str(get_user_model().objects.get_random_password())}',
+            ContentFile(bytes(byte)),
+            save=True
+        )
+
+
+    def decrypt(self, private_key, public_key):
+
+        b, byte = decrypt_file(self.source_file.path, private_key, public_key)
+
+        self.new_file.save(
+            f'{str(get_user_model().objects.get_random_password())}',
+            ContentFile(bytes(byte)),
+            save=True
+        )
+
+        return b
+
