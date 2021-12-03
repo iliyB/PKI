@@ -37,7 +37,9 @@ class GetKeyView(APIView):
         if Certificate.objects.filter(subject_name=object_name).exists():
             object, _ = Subject.objects.get_or_create(subject_name=object_name)
             subject, _ = Subject.objects.get_or_create(subject_name=subject_name)
-            HistoryGetKey.objects.create(subject=subject, object=object)
+            h = HistoryGetKey.objects.create(subject=subject, object=object)
+            print(h)
+            h.save()
             certificate = Certificate.objects.get(subject_name=object_name)
             return Response(CertificateSerializer(certificate).data)
         else:

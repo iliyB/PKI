@@ -21,7 +21,7 @@
                 <br>
             {% endfor %}
         <h4>Как объекта</h4>
-            {% for history in subject.objects.all %}
+            {% for history in subject.object_list.all %}
                 <p>Субъект: {{ history.subject }}</p>
                 <p>Время: {{ history.attempt_time }}</p>
                 <br>

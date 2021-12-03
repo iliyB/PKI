@@ -7,7 +7,7 @@ from settings.celery import app
 from cert.models import Key, Certificate
 from cert.utils import edit_current_time
 
-from PKI.certification.cert.models import InfoCancellation
+from cert.models import InfoCancellation
 
 
 @app.task
