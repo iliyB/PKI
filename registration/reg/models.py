@@ -183,7 +183,9 @@ class Sas(models.Model):
     )
     certificate = models.ManyToManyField(
         As,
-        related_name="sas"
+        related_name="sas",
+        null=True,
+        blank=True,
     )
 
     def __str__(self):
